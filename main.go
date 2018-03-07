@@ -33,7 +33,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 		Host string
 		Log  string
 	}{
-		Listen,
+		r.Host,
 		LogFile,
 	}
 	if err := t.Execute(w, &v); err != nil {
