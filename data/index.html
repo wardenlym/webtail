@@ -48,6 +48,10 @@
                 console.log("websocket: " + e.data);
                 $('html, body').animate({scrollTop: $(document).height()}, 'fast');
             };
+            ws.onclose = function (e) {
+                data.text('Connection closed');
+                data.empty();
+            };
         } else {
             alert("WebSocket NOT SUPPORTED!");
         }
