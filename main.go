@@ -15,15 +15,15 @@ var LogFile string
 var Listen string
 
 func main() {
-
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	flag.StringVar(&LogFile, "log", "/var/log/nginx/access.log", "log file name")
 	flag.StringVar(&Listen, "listen", "127.0.0.1:8327", "log file name")
 	flag.Parse()
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", handleHome)
-	mux.HandleFunc("/follow", websocket.Handler(handleFollow).ServeHTTP)
-	mux.HandleFunc("/tail", handleTail)
+	http.HandleFunc("/", handleHome)
+	http.HandleFunc("/follow", websocket.Handler(handleFollow).ServeHTTP)
+	http.HandleFunc("/tail", handleTail)
+	log.Fatal(http.ListenAndServe(Listen, nil))
 }
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
