@@ -68,7 +68,7 @@ func writer(ws *websocket.Conn) {
 			ws.WriteMessage(websocket.TextMessage, []byte(err.Error()))
 		}
 
-		offset := fi.Size() - int64(512)
+		offset := fi.Size() - int64(1024)
 
 		if offset < 0 {
 			offset = 0
