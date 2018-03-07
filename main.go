@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/hpcloud/tail"
 	"golang.org/x/net/websocket"
@@ -43,6 +44,41 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleFollow(ws *websocket.Conn) {
+
+	ws.Write([]byte("webtail -f\n"))
+	file, err := os.Open(LogFile)
+	if err != nil {
+		log.Println(err)
+		ws.Write([]byte(err.Error() + "\n"))
+	}
+
+	fi, err := file.Stat()
+	if err != nil {
+		log.Println(err)
+		ws.Write([]byte(err.Error() + "\n"))
+	}
+
+	buf := make([]byte, 256)
+	l := fi.Size() - int64(len(buf))
+	log.Println(l, fi.Size(), int64(len(buf)))
+	if l < 0 {
+		l = 0
+	}
+	n, err := file.ReadAt(buf, l)
+	if err != nil {
+		log.Println(err)
+		ws.Write([]byte(err.Error() + "\n"))
+	}
+	buf = buf[:n]
+	log.Println(string(buf))
+
+	ss := strings.Split(string(buf), "\n")
+	for _, s := range ss {
+		ws.Write([]byte(s))
+	}
+
+	file.Close()
+
 	t, err := tail.TailFile(LogFile, tail.Config{Follow: true, ReOpen: true, Location: &tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}})
 	if err != nil {
 		log.Printf("tail file failed, err: %v", err)
@@ -55,6 +91,41 @@ func handleFollow(ws *websocket.Conn) {
 }
 
 func handleTail(w http.ResponseWriter, r *http.Request) {
+
+	w.Write([]byte("webtail -f\n"))
+	file, err := os.Open(LogFile)
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error() + "\n"))
+	}
+
+	fi, err := file.Stat()
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error() + "\n"))
+	}
+
+	buf := make([]byte, 256)
+	l := fi.Size() - int64(len(buf))
+	log.Println(l, fi.Size(), int64(len(buf)))
+	if l < 0 {
+		l = 0
+	}
+	n, err := file.ReadAt(buf, l)
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(err.Error() + "\n"))
+	}
+	buf = buf[:n]
+	log.Println(string(buf))
+
+	ss := strings.Split(string(buf), "\n")
+	for _, s := range ss {
+		w.Write([]byte(s))
+	}
+
+	file.Close()
+
 	t, err := tail.TailFile(LogFile, tail.Config{Follow: true, ReOpen: true, Location: &tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}})
 	if err != nil {
 		log.Printf("tail file failed, err: %v", err)
