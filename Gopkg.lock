@@ -2,44 +2,14 @@
 
 
 [[projects]]
-  name = "github.com/hpcloud/tail"
-  packages = [
-    ".",
-    "ratelimiter",
-    "util",
-    "watch",
-    "winfile"
-  ]
-  revision = "a30252cb686a21eb2d0b98132633053ec2f7f1e5"
-  version = "v1.0.0"
-
-[[projects]]
-  branch = "master"
-  name = "golang.org/x/net"
-  packages = ["websocket"]
-  revision = "d25186b37f34ebdbbea8f488ef055638dfab272d"
-
-[[projects]]
-  branch = "master"
-  name = "golang.org/x/sys"
-  packages = ["unix"]
-  revision = "dd2ff4accc098aceecb86b36eaa7829b2a17b1c9"
-
-[[projects]]
-  name = "gopkg.in/fsnotify.v1"
+  name = "github.com/gorilla/websocket"
   packages = ["."]
-  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
-  version = "v1.4.7"
-
-[[projects]]
-  branch = "v1"
-  name = "gopkg.in/tomb.v1"
-  packages = ["."]
-  revision = "dd632973f1e7218eb1089048e0798ec9ae7dceb8"
+  revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
+  version = "v1.2.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4368571a9e122241f99a8afc8fdd77c505d042c3cef0eca95073508b54ee35ad"
+  inputs-digest = "9bb5473e8ddf72048ad72d7c6f9237578049f8f45af05f45123fd79bf9117d86"
   solver-name = "gps-cdcl"
   solver-version = 1
