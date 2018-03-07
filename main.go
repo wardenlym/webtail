@@ -56,31 +56,34 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 func writer(ws *websocket.Conn) {
 	defer ws.Close()
 	var r *bufio.Reader
+	var f *os.File
 	if LogFile == "" {
 		r = bufio.NewReader(os.Stdin)
 	} else {
-		f, _ := os.Open(LogFile)
+		f, _ = os.Open(LogFile)
 
 		fi, err := f.Stat()
 		if err != nil {
 			fmt.Println(err)
 			ws.WriteMessage(websocket.TextMessage, []byte(err.Error()))
 		}
-		lengh := fi.Size() - int64(256)
 
-		if lengh < 0 {
-			lengh = fi.Size()
+		offset := fi.Size() - int64(512)
+
+		if offset < 0 {
+			offset = 0
 		}
-		fmt.Println(lengh, fi.Size())
-		ret, err := f.Seek((0 - lengh), io.SeekEnd)
+
+		fmt.Println(offset, fi.Size())
+		ret, err := f.Seek(offset, io.SeekStart)
 		fmt.Println(ret, err)
 		if err != nil {
 			ws.WriteMessage(websocket.TextMessage, []byte(err.Error()))
 		}
 
 		r = bufio.NewReader(f)
-		defer f.Close()
 	}
+	defer f.Close()
 	for {
 		p, err := r.ReadBytes('\n')
 

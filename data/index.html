@@ -45,8 +45,8 @@
             ws = new WebSocket("ws://{{.Host}}/follow");
             ws.onmessage = function (e) {
                 $("#messages").append("<p>" + e.data + "</p>");
-                console.log("websocket: " + e.data);
-                $('html, body').animate({scrollTop: $(document).height()}, 'fast');
+                // console.log("websocket: " + e.data);
+                $('html, body').animate({scrollTop: $(document).height()}, 0);
             };
             ws.onclose = function (e) {
                 data.text('Connection closed');
